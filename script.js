@@ -64,6 +64,22 @@ function clearAllItems(e){
     checkUI();
 }
 
+function filterItems(e){
+    const li = ul.querySelectorAll('li');
+    const filterInput = e.target.value.toLowerCase();
+
+    li.forEach(i => {
+        const liNames = i.firstChild.textContent.toLowerCase();
+
+        if(liNames.indexOf(filterInput) != -1){
+            i.style.display = 'flex';
+        }
+        else{
+            i.style.display = 'none';
+        }
+    });
+}
+
 function checkUI(){
     const li = ul.querySelectorAll('li');
 
@@ -82,3 +98,4 @@ checkUI();
 item_form.addEventListener('submit' , addItems);
 ul.addEventListener('click', removeItems);
 clrBtn.addEventListener('click', clearAllItems);
+filter.addEventListener('input' , filterItems);
