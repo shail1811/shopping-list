@@ -1,8 +1,10 @@
 const item_form = document.getElementById('item-form');
 const item_input = document.getElementById('item-input');
 const ul = document.getElementById('item-list');
+const clrBtn = document.getElementById('clear');
+const filter = document.getElementById('filter');
 
-function onSubmit(e){
+function addItems(e){
     e.preventDefault();
 
     const newItem = item_input.value;
@@ -23,6 +25,8 @@ function onSubmit(e){
 
     //Reset the form
     item_input.value = '';
+
+    checkUI();
 }
 
 //Creating a Button 
@@ -46,4 +50,35 @@ function createIcon(classes) {
     return icon;
 }
 
-item_form.addEventListener('submit' , onSubmit);
+function removeItems(e){
+    if(e.target.tagName === 'I'){
+        ul.removeChild(e.target.parentElement.parentElement);
+    }
+    checkUI();
+}
+
+function clearAllItems(e){
+    while(ul.firstChild){
+        ul.removeChild(ul.firstChild);
+    }
+    checkUI();
+}
+
+function checkUI(){
+    const li = ul.querySelectorAll('li');
+
+    if(li.length ===  0){
+        clrBtn.style.display = 'none';
+        filter.style.display = 'none';
+    }
+    else{
+        clrBtn.style.display = 'block';
+        filter.style.display = 'block';
+    }
+}
+
+checkUI();
+
+item_form.addEventListener('submit' , addItems);
+ul.addEventListener('click', removeItems);
+clrBtn.addEventListener('click', clearAllItems);
