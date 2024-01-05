@@ -4,6 +4,12 @@ const ul = document.getElementById('item-list');
 const clrBtn = document.getElementById('clear');
 const filter = document.getElementById('filter');
 
+function displayItems(){ 
+    const itemsFromStorage = getItemsFromStorage();
+    itemsFromStorage.forEach(i => addItemToDOM(i));
+    checkUI();
+}
+
 function onAddItemSubmit(e){
     e.preventDefault();
 
@@ -33,20 +39,6 @@ function addItemToDOM(item){
     ul.appendChild(li);
 }
 
-function addItemToStorage(item){
-    let itemsFromStorage;
-
-    if(localStorage.getItem("items") === null){
-        itemsFromStorage = [];
-    }else{
-        itemsFromStorage = JSON.parse(localStorage.getItem("items"));
-    }
-
-    itemsFromStorage.push(item);
-
-    localStorage.setItem("items" , JSON.stringify(itemsFromStorage));
-}
-
 //Creating a Button 
     //1.create button element
     //2.call create icon 
@@ -66,6 +58,26 @@ function createIcon(classes) {
     const icon = document.createElement('i');
     icon.className = classes;
     return icon;
+}
+
+function addItemToStorage(item){
+    const itemsFromStorage = getItemsFromStorage();
+
+    itemsFromStorage.push(item);
+
+    localStorage.setItem("items" , JSON.stringify(itemsFromStorage));
+}
+
+function getItemsFromStorage(){
+    let itemsFromStorage;
+
+    if(localStorage.getItem("items") === null){
+        itemsFromStorage = [];
+    }else{
+        itemsFromStorage = JSON.parse(localStorage.getItem("items"));
+    }
+
+    return itemsFromStorage;
 }
 
 function removeItems(e){
@@ -111,9 +123,14 @@ function checkUI(){
     }
 }
 
-checkUI();
+function init(){
+    item_form.addEventListener('submit' , onAddItemSubmit);
+    ul.addEventListener('click', removeItems);
+    clrBtn.addEventListener('click', clearAllItems);
+    filter.addEventListener('input' , filterItems);
+    document.addEventListener('DOMContentLoaded' , displayItems);
 
-item_form.addEventListener('submit' , onAddItemSubmit);
-ul.addEventListener('click', removeItems);
-clrBtn.addEventListener('click', clearAllItems);
-filter.addEventListener('input' , filterItems);
+    checkUI();
+}
+
+init();
