@@ -80,11 +80,29 @@ function getItemsFromStorage(){
     return itemsFromStorage;
 }
 
-function removeItems(e){
+function onClickItem(e){
     if(e.target.tagName === 'I'){
-        ul.removeChild(e.target.parentElement.parentElement);
+        removeItem(e.target.parentElement.parentElement);
+    }
+}
+
+function removeItem(item){
+    if(confirm('Are you Sure?')){
+        //remove item from DOM
+        item.remove();
+
+        //remove item from storage
+        removeItemFromStorage(item.textContent);
     }
     checkUI();
+}
+
+function removeItemFromStorage(item){
+    let itemsFromStorage = getItemsFromStorage();
+
+    itemsFromStorage = itemsFromStorage.filter(i => i !== item);
+
+    localStorage.setItem('items' , JSON.stringify(itemsFromStorage));
 }
 
 function clearAllItems(e){
@@ -125,7 +143,7 @@ function checkUI(){
 
 function init(){
     item_form.addEventListener('submit' , onAddItemSubmit);
-    ul.addEventListener('click', removeItems);
+    ul.addEventListener('click', onClickItem);
     clrBtn.addEventListener('click', clearAllItems);
     filter.addEventListener('input' , filterItems);
     document.addEventListener('DOMContentLoaded' , displayItems);
